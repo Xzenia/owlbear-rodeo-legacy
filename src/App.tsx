@@ -1,5 +1,5 @@
 import { ThemeProvider } from "theme-ui";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import theme from "./theme";
 import Home from "./routes/Home";
@@ -25,7 +25,7 @@ function App() {
           <KeyboardProvider>
             <ToastProvider>
               <Router>
-                <Switch>
+                <Routes>
                   <Route path="/how-to">
                     <HowTo />
                   </Route>
@@ -48,7 +48,7 @@ function App() {
                   <Route path="/">
                     <Home />
                   </Route>
-                </Switch>
+                </Routes>
               </Router>
             </ToastProvider>
           </KeyboardProvider>
