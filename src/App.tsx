@@ -26,28 +26,19 @@ function App() {
             <ToastProvider>
               <Router>
                 <Routes>
-                  <Route path="/how-to">
-                    <HowTo />
-                  </Route>
-                  <Route path="/release-notes">
-                    <ReleaseNotes />
-                  </Route>
-                  <Route path="/about">
-                    <About />
-                  </Route>
-                  <Route path="/faq">
-                    <FAQ />
-                  </Route>
-                  <Route path="/game/:id">
-                    <DatabaseProvider>
+                  <Route path="/how-to" element={<HowTo />}/>
+                  <Route path="/release-notes" element={<ReleaseNotes />}/>
+                  <Route path="/about" element={<About />}/>
+                  <Route path="/faq" element={<FAQ />}/>
+                  <Route path="/game/:id"
+                  element={
+                      <DatabaseProvider>
                       <UserIdProvider>
                         <Game />
                       </UserIdProvider>
                     </DatabaseProvider>
-                  </Route>
-                  <Route path="/">
-                    <Home />
-                  </Route>
+                  }/>
+                  <Route path="/" element={<Home />}/>
                 </Routes>
               </Router>
             </ToastProvider>

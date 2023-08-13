@@ -3,7 +3,7 @@ import App from "./App";
 import Modal from "react-modal";
 
 // Add css for simplebar
-import "simplebar/dist/simplebar.min.css";
+import "./simplebar.min.css";
 
 import * as serviceWorker from "./serviceWorker";
 

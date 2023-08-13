@@ -1,6 +1,6 @@
 import { useState, useRef, FormEvent, ChangeEvent } from "react";
 import { Box, Label, Input, Button, Flex } from "theme-ui";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Modal from "../components/Modal";
 
@@ -12,7 +12,7 @@ type JoinModalProps = {
 };
 
 function JoinModal({ isOpen, onRequestClose }: JoinModalProps) {
-  let history = useHistory();
+  let history = useNavigate();
   const [gameId, setGameId] = useState("");
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {

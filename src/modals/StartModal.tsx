@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef } from "react";
 import { Box, Label, Input, Button, Flex, Checkbox } from "theme-ui";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import shortid from "shortid";
 
 import { useAuth } from "../contexts/AuthContext";
@@ -17,7 +17,7 @@ type StartModalProps = {
 };
 
 function StartModal({ isOpen, onRequestClose }: StartModalProps) {
-  let history = useHistory();
+  let history = useNavigate();
   const { password, setPassword } = useAuth();
 
   function handlePasswordChange(event: ChangeEvent<HTMLInputElement>) {
