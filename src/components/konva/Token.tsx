@@ -418,6 +418,8 @@ function Token({
 
   return (
     <>
+    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+    {/* @ts-ignore: https://github.com/pmndrs/react-spring/issues/1515 */}
       <animated.Group
         {...props}
         width={tokenWidth}

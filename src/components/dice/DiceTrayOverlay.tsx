@@ -3,7 +3,7 @@ import { Vector3 } from "@babylonjs/core/Maths/math";
 import { DirectionalLight } from "@babylonjs/core/Lights/directionalLight";
 import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
 import { CubeTexture } from "@babylonjs/core/Materials/Textures/cubeTexture";
-import { Scene } from "@babylonjs/core";
+import { Scene, Engine } from "@babylonjs/core";
 import { Box } from "theme-ui";
 
 // @ts-ignore
@@ -108,7 +108,7 @@ function DiceTrayOverlay({
     return cleanup;
   }, [isOpen]);
 
-  const handleSceneMount = useCallback(async ({ scene, engine }) => {
+  const handleSceneMount = useCallback(async ({ scene, engine } : {scene: Scene, engine: Engine}) => {
     sceneRef.current = scene;
     await initializeScene(scene);
     engine.runRenderLoop(() => update(scene));

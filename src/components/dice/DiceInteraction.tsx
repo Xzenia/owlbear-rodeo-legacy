@@ -4,7 +4,7 @@ import { Scene } from "@babylonjs/core/scene";
 import { Vector3, Color4, Matrix } from "@babylonjs/core/Maths/math";
 import { AmmoJSPlugin } from "@babylonjs/core/Physics/Plugins/ammoJSPlugin";
 import { TargetCamera } from "@babylonjs/core/Cameras/targetCamera";
-import Ammo from "ammo.js";
+import Ammo from "../../packages/ammo-js/ammo.js";
 
 import "@babylonjs/core/Physics/physicsEngineComponent";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
