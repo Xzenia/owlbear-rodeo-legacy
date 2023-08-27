@@ -16,7 +16,7 @@ import { Props } from "@dnd-kit/core/dist/components/DndContext/DndContext";
  */
 
 type DragEndWithOverlayEvent = {
-  overlayNodeClientRect?: DOMRect;
+  dragOverlayClientRect?: DOMRect;
 };
 
 export type CustomDragEndEvent = DragEndWithOverlayEvent & DragEndEvent;
@@ -26,13 +26,13 @@ type CustomDragProps = {
 };
 
 function DragPositionMonitor({ onDragEnd }: CustomDragProps) {
-  const { overlayNode } = useDndContext();
+  const { dragOverlay } = useDndContext();
 
-  const overlayNodeClientRectRef = useRef<DOMRect>();
+  const dragOverlayClientRectRef = useRef<DOMRect>();
   function handleDragMove() {
-    if (overlayNode?.nodeRef?.current) {
-      overlayNodeClientRectRef.current =
-        overlayNode.nodeRef.current.getBoundingClientRect();
+    if (dragOverlay?.nodeRef?.current) {
+      dragOverlayClientRectRef.current =
+        dragOverlay.nodeRef.current.getBoundingClientRect();
     }
   }
 
@@ -40,7 +40,7 @@ function DragPositionMonitor({ onDragEnd }: CustomDragProps) {
     onDragEnd &&
       onDragEnd({
         ...props,
-        overlayNodeClientRect: overlayNodeClientRectRef.current,
+        dragOverlayClientRect: dragOverlayClientRectRef.current,
       });
   }
   useDndMonitor({ onDragEnd: handleDragEnd, onDragMove: handleDragMove });

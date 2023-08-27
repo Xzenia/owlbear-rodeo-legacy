@@ -30,7 +30,7 @@ export function MapLoadingProvider({
   // Loading progress of all assets between 0 and 1
   const loadingProgressRef = useRef<number>(0);
 
-  const assetLoadStart = useCallback((id) => {
+  const assetLoadStart = useCallback((id: string) => {
     setIsLoading(true);
     // Add asset at a 0% progress
     assetProgressRef.current = {
@@ -39,7 +39,7 @@ export function MapLoadingProvider({
     };
   }, []);
 
-  const assetProgressUpdate = useCallback(({ id, count, total }) => {
+  const assetProgressUpdate = useCallback(({ id, count, total }: {id: string, count: number, total: number}) => {
     assetProgressRef.current = {
       ...assetProgressRef.current,
       [id]: { count, total },

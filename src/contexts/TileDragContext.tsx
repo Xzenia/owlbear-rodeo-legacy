@@ -6,12 +6,12 @@ import {
   useSensor,
   useSensors,
   closestCenter,
-  RectEntry,
 } from "@dnd-kit/core";
 
 import DragContext, { CustomDragEndEvent } from "./DragContext";
-import { DragStartEvent, DragOverEvent, ViewRect } from "@dnd-kit/core";
-import { DragCancelEvent } from "@dnd-kit/core/dist/types";
+import { DragStartEvent, DragOverEvent, ClientRect, } from "@dnd-kit/core";
+import { RectMap } from "@dnd-kit/core/dist/store/types";
+import { DragCancelEvent, } from "@dnd-kit/core/dist/types";
 
 import { useGroup } from "./GroupContext";
 
@@ -35,16 +35,16 @@ export const UNGROUP_ID = "__ungroup__";
 export const ADD_TO_MAP_ID = "__add__";
 
 // Custom rectIntersect that takes a point
-function rectIntersection(rects: RectEntry[], point: Vector2) {
+function rectIntersection(rects: RectMap, point: Vector2) {
   for (let rect of rects) {
     const [id, bounds] = rect;
     if (
       id &&
       bounds &&
-      point.x > bounds.offsetLeft &&
-      point.x < bounds.offsetLeft + bounds.width &&
-      point.y > bounds.offsetTop &&
-      point.y < bounds.offsetTop + bounds.height
+      point.x > bounds.left &&
+      point.x < bounds.left + bounds.width &&
+      point.y > bounds.top &&
+      point.y < bounds.top + bounds.height
     ) {
       return id;
     }
@@ -104,10 +104,10 @@ export function TileDragProvider({
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
-    setDragId(active.id);
+    setDragId(String(active.id));
     setOverId(null);
-    if (!selectedGroupIds.includes(active.id)) {
-      onGroupSelect(active.id);
+    if (!selectedGroupIds.includes(String(active.id))) {
+      onGroupSelect(String(active.id));
     }
     setDragCursor("grabbing");
 
@@ -119,14 +119,14 @@ export function TileDragProvider({
   function handleDragOver(event: DragOverEvent) {
     const { over } = event;
 
-    setOverId(over?.id || null);
+    setOverId(String(over?.id) || null)
     if (over) {
       if (
-        over.id.startsWith(UNGROUP_ID) ||
-        over.id.startsWith(GROUP_ID_PREFIX)
+        String(over.id).startsWith(UNGROUP_ID) ||
+        String(over.id).startsWith(GROUP_ID_PREFIX)
       ) {
         setDragCursor("alias");
-      } else if (over.id.startsWith(ADD_TO_MAP_ID)) {
+      } else if (String(over.id).startsWith(ADD_TO_MAP_ID)) {
         setDragCursor(onDragAdd ? "copy" : "no-drop");
       } else {
         setDragCursor("grabbing");
@@ -135,23 +135,23 @@ export function TileDragProvider({
   }
 
   function handleDragEnd(event: CustomDragEndEvent) {
-    const { active, over, overlayNodeClientRect } = event;
+    const { active, over, dragOverlayClientRect } = event;
 
     setDragId(null);
     setOverId(null);
     setDragCursor("pointer");
-    if (active && over && active.id !== over.id) {
+    if (active && over && String(active.id) !== over.id) {
       let selectedIndices = selectedGroupIds.map((groupId) =>
         activeGroups.findIndex((group) => group.id === groupId)
       );
       // Maintain current group sorting
       selectedIndices = selectedIndices.sort((a, b) => a - b);
 
-      if (over.id.startsWith(GROUP_ID_PREFIX)) {
+      if (String(over.id).startsWith(GROUP_ID_PREFIX)) {
         onClearSelection();
         // Handle tile group
-        const overId = over.id.slice(9);
-        if (overId !== active.id) {
+        const overId = String(over.id).slice(9);
+        if (overId !== String(active.id)) {
           const overGroupIndex = activeGroups.findIndex(
             (group) => group.id === overId
           );
@@ -173,8 +173,8 @@ export function TileDragProvider({
         }
       } else if (over.id === ADD_TO_MAP_ID) {
         onDragAdd &&
-          overlayNodeClientRect &&
-          onDragAdd(selectedGroupIds, overlayNodeClientRect);
+          dragOverlayClientRect &&
+          onDragAdd(selectedGroupIds, dragOverlayClientRect);
       } else if (!filter) {
         // Hanlde tile move only if we have no filter
         const overGroupIndex = activeGroups.findIndex(
@@ -208,14 +208,15 @@ export function TileDragProvider({
     onDragCancel && onDragCancel(event);
   }
 
-  function customCollisionDetection(rects: RectEntry[], rect: ViewRect) {
+  function customCollisionDetection(rects: RectMap, rect: ClientRect) {
     const rectCenter = {
       x: rect.left + rect.width / 2,
       y: rect.top + rect.height / 2,
     };
 
     // Find whether out rect center is outside our add to map rect
-    const addRect = rects.find(([id]) => id === ADD_TO_MAP_ID);
+    const addRect = rects.
+    (([id]) => id === ADD_TO_MAP_ID);
     if (addRect) {
       const intersectingAddRect = rectIntersection([addRect], rectCenter);
       if (!intersectingAddRect) {

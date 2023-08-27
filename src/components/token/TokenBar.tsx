@@ -60,13 +60,13 @@ function TokenBar({ onMapTokensStateCreate }: TokenBarProps) {
   const [preventSelect, resumeSelect] = usePreventSelect();
 
   function handleDragStart({ active }: DragStartEvent) {
-    setDragId(active.id);
+    setDragId(String(active.id));
     preventSelect();
   }
 
   function handleDragEnd({
     active,
-    overlayNodeClientRect,
+    dragOverlayClientRect,
   }: CustomDragEndEvent) {
     setDragId(null);
     resumeSelect();
@@ -74,14 +74,14 @@ function TokenBar({ onMapTokensStateCreate }: TokenBarProps) {
       return;
     }
     const mapStage = mapStageRef.current;
-    if (mapStage && overlayNodeClientRect) {
-      const dragRect = overlayNodeClientRect;
+    if (mapStage && dragOverlayClientRect) {
+      const dragRect = dragOverlayClientRect;
       const dragPosition = {
         x: dragRect.left + dragRect.width / 2,
         y: dragRect.top + dragRect.height / 2,
       };
       const mapPosition = clientPositionToMapPosition(mapStage, dragPosition);
-      const group = findGroup(tokenGroups, active.id);
+      const group = findGroup(tokenGroups, String(active.id));
       if (group && mapPosition) {
         if (group.type === "item") {
           const token = tokensById[group.id];
